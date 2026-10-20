@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#f4f7f3" />
+  <meta name="description" content="香港蚊蟲防控策略互動示範：調整干預與穩健性設定，探索相對豐度的時間和空間變化。" />
+  <title>MosquitoHK · 防控策略探索器</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="./language.css" />
+  <link rel="stylesheet" href="./theme.css" />
+  <link rel="stylesheet" href="./palette-study.css" />
+  <script defer src="./app.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="情景設定">
+      <div class="brand"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><div><strong>Mosquito<span>HK</span></strong><small>INFECTIOUS DISEASE MODELLING GROUP</small></div></div>
+      <div class="sidebar-intro"><span class="eyebrow">COLOUR STUDY · 2025 BASELINE</span><h1>防控策略<br><em>探索器</em></h1><p>調整釋放與防治方案，觀察香港蚊蟲相對豐度的時空變化。</p></div>
+
+      <div class="sidebar-tabs" role="tablist" aria-label="設定面板">
+        <button id="tabStrategy" class="tab active" role="tab" aria-selected="true" aria-controls="panelStrategy">策略設定</button>
+        <button id="tabRobust" class="tab" role="tab" aria-selected="false" aria-controls="panelRobust">穩健性</button>
+      </div>
+
+      <div id="panelStrategy" class="settings-panel" role="tabpanel" aria-labelledby="tabStrategy">
+        <div class="section-heading release-heading"><span>01</span><div><h2>環境與釋放</h2><p>設定共同的天氣及 Wolbachia 方案</p></div></div>
+        <label class="field-label" for="weather">天氣情景 <span class="help" title="使用 2025 年基線，以示意因子呈現偏乾及強降雨情景。">ⓘ</span></label>
+        <select id="weather"><option value="normal">2025 年基線</option><option value="dry">偏乾情景 · 示意</option><option value="wet">強降雨情景 · 示意</option></select>
+
+        <div class="control-row"><label for="release">釋放強度</label><output id="releaseValue" for="release">2.0×</output></div>
+        <input id="release" type="range" min="0" max="5" step="0.1" value="2" />
+        <p class="field-hint">相對於當地野生雄蚊的示意釋放量</p>
+
+        <div class="field-label">釋放方式</div>
+        <div class="segmented" role="group" aria-label="釋放方式"><button class="active" data-group="frequency" data-value="impulsive" type="button">集中一次</button><button data-group="frequency" data-value="periodic" type="button">定期多次</button></div>
+        <p class="field-hint">兩種方式的總釋放量保持一致</p>
+
+        <div class="field-label">開始時間</div>
+        <div class="segmented three" role="group" aria-label="開始時間"><button data-group="timing" data-value="pre" type="button">蚊季前</button><button class="active" data-group="timing" data-value="rise" type="button">增長期</button><button data-group="timing" data-value="peak" type="button">高峰期</button></div>
+
+        <div class="section-heading second chemical-heading"><span>02</span><div><h2>化學防治</h2><p>比較單獨及聯合干預</p></div></div>
+        <label class="field-label" for="chemical">防治類型</label>
+        <select id="chemical"><option value="none">不使用化學防治</option><option value="larvicide">殺幼蟲劑</option><option value="adulticide">成蚊殺蟲劑</option><option value="both">兩者並用</option></select>
+        <div id="larvaControl" class="conditional"><div class="control-row"><label for="larva">殺幼蟲劑效果</label><output id="larvaValue" for="larva">55%</output></div><input id="larva" type="range" min="0" max="100" step="5" value="55" /></div>
+        <div id="adultControl" class="conditional"><div class="control-row"><label for="adult">成蚊殺蟲劑效果</label><output id="adultValue" for="adult">45%</output></div><input id="adult" type="range" min="0" max="100" step="5" value="45" /></div>
+
+        <div class="section-heading second"><span>03</span><div><h2>空間配置</h2><p>配置熱點中心與周邊的措施</p></div></div>
+        <div class="allocation-list" role="radiogroup" aria-label="空間配置">
+          <label><input type="radio" name="allocation" value="wolbachia" checked /><span><b>Wolbachia 置中</b><small>化學防治在周邊</small></span></label>
+          <label><input type="radio" name="allocation" value="chemical" /><span><b>化學防治置中</b><small>Wolbachia 在周邊</small></span></label>
+          <label><input type="radio" name="allocation" value="overlap" /><span><b>兩者同地</b><small>共同作用於熱點</small></span></label>
+          <label><input type="radio" name="allocation" value="random" /><span><b>隨機配置</b><small>作為比較參照</small></span></label>
+        </div>
+      </div>
+
+      <div id="panelRobust" class="settings-panel" role="tabpanel" aria-labelledby="tabRobust" hidden>
+        <div class="section-heading"><span>04</span><div><h2>生物不確定性</h2><p>改變釋放雄蚊的有效性</p></div></div>
+        <div class="control-row"><label for="competition">交配競爭力</label><output id="competitionValue" for="competition">1.00×</output></div><input id="competition" type="range" min="0.5" max="1.5" step="0.05" value="1" />
+        <div class="control-row"><label for="ci">不相容性強度</label><output id="ciValue" for="ci">95%</output></div><input id="ci" type="range" min="50" max="100" step="5" value="95" />
+        <div class="section-heading second"><span>05</span><div><h2>執行偏差</h2><p>測試現場安排與計畫的差距</p></div></div>
+        <div class="control-row"><label for="shortfall">釋放量不足</label><output id="shortfallValue" for="shortfall">0%</output></div><input id="shortfall" type="range" min="0" max="50" step="5" value="0" />
+        <div class="control-row"><label for="delay">開始延遲</label><output id="delayValue" for="delay">0 天</output></div><input id="delay" type="range" min="0" max="35" step="1" value="0" />
+        <div class="control-row"><label for="drugFactor">藥劑效果倍率</label><output id="drugFactorValue" for="drugFactor">1.00×</output></div><input id="drugFactor" type="range" min="0.4" max="1.2" step="0.05" value="1" />
+        <p class="robust-note">此面板的範圍是前端示意；正式研究應以擬合後驗及實測執行資料設定。</p>
+      </div>
+      <div class="sidebar-bottom"><button id="reset" class="reset-button" type="button">↺ <span>還原預設設定</span></button><p>資料基線：MosquitoHK 2025 · 1 km 格網</p></div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar"><div class="breadcrumb">MOSQUITOHK <span>/</span> STRATEGY EXPLORER</div><div class="topbar-right"><div class="language-switch" role="group" aria-label="語言 / Language"><button id="langZh" class="active" type="button" lang="zh-Hant" aria-pressed="true">中文</button><button id="langEn" type="button" lang="en" aria-pressed="false">English</button></div><span class="topbar-status"><span class="status-dot"></span> <span class="topbar-demo">配色方案預覽</span></span><span class="topbar-divider"></span><span class="topbar-baseline">2025 年基線</span></div></header>
+      <div class="content-wrap">
+        <div class="page-heading"><div><div class="eyebrow light">SPATIAL × TEMPORAL ANALYSIS</div><h2>香港蚊蟲相對豐度</h2><p>探索干預時機、釋放方式和空間配置如何改變季節曲線。</p></div><div class="demo-pill">DEMO <span>·</span> 非正式模型預測</div></div>
+
+        <div class="metrics"><div class="metric-card"><span>選定日期</span><strong id="metricDate">—</strong><small>沿時間曲線移動以更新地圖</small></div><div class="metric-card"><span>全港平均相對豐度</span><strong id="metricAbundance">—</strong><small>以基線全年峰值 = 100% 表示</small></div><div class="metric-card accent"><span>較無干預情景降低</span><strong id="metricReduction">—</strong><small>同一天、同一個天氣情景</small></div></div>
+
+        <section class="map-card card" aria-labelledby="mapHeading"><div class="card-header"><div><div class="section-kicker">01 / SPATIAL VIEW</div><h3 id="mapHeading">香港 1 km 格網地圖</h3><p>野生雌性成蚊相對豐度 · 由綠至紅表示較高</p></div><div class="map-date"><span>地圖日期</span><strong id="mapDate">—</strong></div></div><div class="map-wrap"><canvas id="mapCanvas" aria-label="香港蚊蟲相對豐度格網地圖"></canvas><div id="mapTooltip" class="map-tooltip" hidden></div><div class="map-scale"><span>較低</span><div class="gradient"></div><span>較高</span></div><div class="map-note">實際香港格網 · 干預效果為示意</div></div></section>
+
+        <section class="chart-card card" aria-labelledby="chartHeading"><div class="card-header chart-header"><div><div class="section-kicker">02 / TEMPORAL VIEW</div><h3 id="chartHeading">全港平均 · 時間曲線</h3><p>移動滑鼠或拖動下方日期滑桿，同步查看當天地圖</p></div><div class="chart-legend"><span><i class="line-key base"></i> 無干預</span><span><i class="line-key scenario"></i> 目前策略</span><span id="bandLegend"><i class="band-key"></i> 示意範圍</span></div></div><div class="chart-wrap"><svg id="chart" viewBox="0 0 940 266" role="img" aria-label="全港平均相對豐度時間曲線"></svg><div id="chartTooltip" class="chart-tooltip" hidden></div></div><div class="timeline-bar"><button id="play" class="play-button" aria-label="播放時間變化" title="播放時間變化">▶</button><input id="daySlider" type="range" min="0" max="364" step="1" value="205" aria-label="選擇地圖日期" /><span id="sliderDate">—</span></div><div class="chart-options"><div class="chart-options-copy"><span>06</span><div><h4>顯示選項</h4><p>檢視結果對不確定性的敏感度</p></div></div><label class="switch-row"><span><b>示意不確定性帶</b><small>以目前情景效果顯示變動範圍</small></span><input id="uncertainty" type="checkbox" checked /><i aria-hidden="true"></i></label></div></section>
+
+        <footer class="source-note"><strong>關於此示範</strong><span>地理格網與無干預基線來自所提供的 MosquitoHK preliminary results。調整控件後的變化由前端示意規則產生，不代表已擬合的三階段模型預測、實測 AGI 或政策效果。</span></footer>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
