@@ -11,7 +11,7 @@
   color: #243746;
   border-right: 1px solid #d7e0e4;
   box-shadow: none;
-  width: 380px; /* 拉宽左边栏，可根据实际布局需求微调 */
+  width: 380px; /* 拉宽左边栏 */
   min-width: 380px;
 }
 
